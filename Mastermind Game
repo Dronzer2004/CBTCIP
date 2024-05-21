@@ -1,0 +1,83 @@
+def provide_hint(secret, guess):
+    """
+    Provide a hint by revealing which digits Player 2 got correct.
+    
+    :param secret: The secret number set by Player 1
+    :param guess: The guess made by Player 2
+    :return: A string indicating which digits are correct
+    """
+    hint = []
+    for s, g in zip(secret, guess):
+        if s == g:
+            hint.append(s)
+        else:
+            hint.append('_')
+    return ''.join(hint)
+
+def play_game():
+    """
+    Play a full game of Mastermind.
+    """
+    def get_secret_input(player):
+        while True:
+            secret = input(f"{player}, set a multi-digit number (no spaces): ")
+            if secret.isdigit():
+                return secret
+            else:
+                print("Invalid input. Please enter a multi-digit number.")
+
+    def get_guess_input(player, length):
+        while True:
+            guess = input(f"{player}, guess the {length}-digit number: ")
+            if guess.isdigit() and len(guess) == length:
+                return guess
+            else:
+                print(f"Invalid input. Please enter a {length}-digit number.")
+
+    # Player 1 sets the number
+    player1 = "Player 1"
+    player2 = "Player 2"
+    
+    secret1 = get_secret_input(player1)
+    attempts1 = 0
+    
+    print("\n" * 50)  # Clear the screen
+
+    # Player 2 guesses
+    print(f"{player2}, try to guess the number set by {player1}.")
+    while True:
+        guess1 = get_guess_input(player2, len(secret1))
+        attempts1 += 1
+        if guess1 == secret1:
+            print(f"Correct! {player2} guessed the number in {attempts1} attempts.")
+            break
+        else:
+            hint = provide_hint(secret1, guess1)
+            print(f"Hint: {hint}")
+    
+    # Swap roles
+    secret2 = get_secret_input(player2)
+    attempts2 = 0
+    
+    print("\n" * 50)  # Clear the screen
+
+    # Player 1 guesses
+    print(f"{player1}, try to guess the number set by {player2}.")
+    while True:
+        guess2 = get_guess_input(player1, len(secret2))
+        attempts2 += 1
+        if guess2 == secret2:
+            print(f"Correct! {player1} guessed the number in {attempts2} attempts.")
+            break
+        else:
+            hint = provide_hint(secret2, guess2)
+            print(f"Hint: {hint}")
+
+    # Determine the winner
+    if attempts1 < attempts2:
+        print(f"{player1} wins and is crowned Mastermind!")
+    else:
+        print(f"{player2} wins and is crowned Mastermind!")
+
+# Start the game
+play_game()
