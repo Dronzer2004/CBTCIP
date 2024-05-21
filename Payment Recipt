@@ -1,1 +1,62 @@
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+from reportlab.lib.units import inch
+
+def create_receipt(transaction_id, date, customer_name, items, total_amount, output_file):
+    """
+    Create a PDF receipt using the provided transaction details.
+
+    :param transaction_id: Unique ID of the transaction
+    :param date: Date of the transaction
+    :param customer_name: Name of the customer
+    :param items: List of tuples containing item details (item_name, quantity, price)
+    :param total_amount: Total amount of the transaction
+    :param output_file: Name of the output PDF file
+    """
+    # Create a canvas object
+    c = canvas.Canvas(output_file, pagesize=letter)
+    width, height = letter
+
+    # Add title
+    c.setFont("Helvetica-Bold", 18)
+    c.drawString(200, height - 50, "Payment Receipt")
+
+    # Add transaction details
+    c.setFont("Helvetica", 12)
+    c.drawString(50, height - 100, f"Transaction ID: {transaction_id}")
+    c.drawString(50, height - 120, f"Date: {date}")
+    c.drawString(50, height - 140, f"Customer Name: {customer_name}")
+
+    # Add table header
+    c.setFont("Helvetica-Bold", 12)
+    c.drawString(50, height - 180, "Item")
+    c.drawString(300, height - 180, "Quantity")
+    c.drawString(400, height - 180, "Price")
+
+    # Add table rows
+    c.setFont("Helvetica", 12)
+    y = height - 200
+    for item_name, quantity, price in items:
+        c.drawString(50, y, item_name)
+        c.drawString(300, y, str(quantity))
+        c.drawString(400, y, f"${price:.2f}")
+        y -= 20
+
+    # Add total amount
+    c.setFont("Helvetica-Bold", 12)
+    c.drawString(50, y - 20, f"Total Amount: ${total_amount:.2f}")
+
+    # Save the PDF file
+    c.save()
+    print(f"Receipt saved as {output_file}")
+
+# Example usage
+transaction_id = "1234567890"
+date = "2024-05-21"
+customer_name = "John Doe"
+items = [("Item A", 2, 19.99), ("Item B", 1, 9.99), ("Item C", 3, 4.99)]
+total_amount = sum(quantity * price for _, quantity, price in items)
+output_file = "receipt.pdf"
+
+create_receipt(transaction_id, date, customer_name, items, total_amount, output_file)
 
