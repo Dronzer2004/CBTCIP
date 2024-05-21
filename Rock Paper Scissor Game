@@ -1,0 +1,30 @@
+def get_winner(player1_choice, player2_choice):
+    """
+    Determine the winner of a Rock-Paper-Scissors game.
+
+    :param player1_choice: Choice of player 1 (Rock, Paper, or Scissors)
+    :param player2_choice: Choice of player 2 (Rock, Paper, or Scissors)
+    :return: Result indicating the winner or if it's a tie
+    """
+    choices = ['rock', 'paper', 'scissors']
+
+    # Validate choices
+    if player1_choice not in choices or player2_choice not in choices:
+        return "Invalid input! Please choose either 'rock', 'paper', or 'scissors'."
+
+    # Determine winner
+    if player1_choice == player2_choice:
+        return "It's a tie!"
+    elif (player1_choice == 'rock' and player2_choice == 'scissors') or \
+         (player1_choice == 'paper' and player2_choice == 'rock') or \
+         (player1_choice == 'scissors' and player2_choice == 'paper'):
+        return "Player 1 wins!"
+    else:
+        return "Player 2 wins!"
+
+# Example usage
+player1_choice = input("Player 1, enter your choice (rock, paper, or scissors): ").lower()
+player2_choice = input("Player 2, enter your choice (rock, paper, or scissors): ").lower()
+
+result = get_winner(player1_choice, player2_choice)
+print(result)
